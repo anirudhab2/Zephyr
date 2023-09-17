@@ -25,7 +25,12 @@ final class SearchPresenter {
     private let interactor: SearchInteractable
     private let router: SearchRoutable
     private let debouncer: DebounceWorker
-    private var searchResults: [SearchResult] = []
+
+    private var searchResults: RemoteModel<[SearchResult], HttpError> = .notFetched {
+        didSet {
+            searchResultsUpdated(to: searchResults)
+        }
+    }
 
     init(
         interactor: SearchInteractable,
@@ -40,10 +45,30 @@ final class SearchPresenter {
 // MARK: - Helpers
 extension SearchPresenter {
     private func searchResult(atIndex index: Int) -> SearchResult? {
-        guard searchResults.indices.contains(index) else {
+        guard case .fetched(let results) = searchResults,
+              results.indices.contains(index) else {
             return nil
         }
-        return searchResults[index]
+        return results[index]
+    }
+
+    private func searchResultsUpdated(to result: RemoteModel<[SearchResult], HttpError>) {
+        switch result {
+        case .notFetched:
+            view?.renderContents()
+
+        case .fetching:
+            view?.renderLoading()
+
+        case .fetched(let results):
+            if results.isEmpty {
+                fallthrough
+            }
+            view?.renderContents()
+
+        case .failed:
+            view?.renderError(message: "No results found")
+        }
     }
 }
 
@@ -54,6 +79,10 @@ extension SearchPresenter: SearchPresentable {
     }
 
     func search(text: String) {
+        if text.isEmpty {
+            searchResults = .notFetched
+            return
+        }
         debouncer.cancel()
         interactor.cancelInProgressSearch()
         debouncer.debounce { [weak self] in
@@ -62,7 +91,10 @@ extension SearchPresenter: SearchPresentable {
     }
 
     func numberOfItems() -> Int {
-        searchResults.count
+        guard case .fetched(let results) = searchResults else {
+            return 0
+        }
+        return results.count
     }
 
     func titleForSearchResult(atIndex index: Int) -> String? {
@@ -83,11 +115,10 @@ extension SearchPresenter: SearchPresentable {
 // MARK: SearchInteractorListener
 extension SearchPresenter: SearchInteractorListener {
     func didFetchSearchResults(_ results: [SearchResult]) {
-        searchResults = results
-        view?.refreshContents()
+        searchResults = .fetched(results)
     }
 
     func didFailToFetchSearchResults(with error: HttpError) {
-        view?.renderError()
+        searchResults = .failed(error)
     }
 }

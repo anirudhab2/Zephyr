@@ -96,9 +96,9 @@ extension WeatherPrimaryInfoCell {
 // MARK: - Style
 extension WeatherPrimaryInfoCell {
     private struct Style {
-        let temperature = UIFont.systemFont(ofSize: 90, weight: .thin)
+        let temperature = UIFont.systemFont(ofSize: 80, weight: .thin)
         let summary = UIFont.systemFont(ofSize: 16, weight: .regular)
-        let iconSize = CGSize(width: 90, height: 90)
+        let iconSize = CGSize(width: 80, height: 80)
         let spacingX: CGFloat = 10
         let spacingY: CGFloat = 20
         let contentInsets = UIEdgeInsets(top: 20, left: 0, bottom: 40, right: 0)

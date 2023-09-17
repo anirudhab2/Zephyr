@@ -23,7 +23,7 @@ final class SearchResultCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: style.titleFontSize)
-        l.textColor = Colors.Named.black
+        l.textColor = Colors.Named.white
         l.numberOfLines = 2
         return l
     }()
@@ -41,6 +41,8 @@ final class SearchResultCell: UITableViewCell {
 
     private func commonInit() {
         selectionStyle = .none
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
         titleLabel.fill(in: contentView, with: style.contentInsets)
     }
 }

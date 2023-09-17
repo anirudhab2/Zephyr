@@ -10,14 +10,17 @@ import UIKit
 
 // MARK: - SearchViewable
 protocol SearchViewable: AnyObject {
-    func refreshContents()
-    func renderError()
+    func renderContents()
+    func renderError(message: String)
+    func renderLoading()
 }
 
 // MARK: - SearchViewController
 final class SearchViewController: UIViewController {
 
     private let presenter: SearchPresentable
+    private weak var loadingView: UIActivityIndicatorView?
+    private weak var errorView: UIView?
 
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
@@ -26,6 +29,9 @@ final class SearchViewController: UIViewController {
         bar.placeholder = "Find location"
         bar.showsCancelButton = true
         bar.delegate = self
+        bar.tintColor = Colors.Named.white
+        bar.searchTextField.tintColor = Colors.Named.white
+        bar.searchTextField.textColor = Colors.Named.white
         return bar
     }()
 
@@ -52,7 +58,7 @@ final class SearchViewController: UIViewController {
     // MARK: - View Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Colors.Background.primary
+
         setupLayout()
     }
 
@@ -65,19 +71,72 @@ final class SearchViewController: UIViewController {
 // MARK: - Layout
 extension SearchViewController {
     private func setupLayout() {
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        blur.fill(in: view)
+        view.backgroundColor = nil
+        tableView.backgroundColor = nil
         navigationItem.titleView = searchBar
         tableView.fill(in: view)
     }
 }
 
+// MARK: - Helpers
+extension SearchViewController {
+    private func showLoading() {
+        guard loadingView == nil else { return }
+
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.tintColor = Colors.Named.white
+        loader.fill(in: view)
+        loader.startAnimating()
+        self.loadingView = loader
+    }
+
+    private func removeLoading() {
+        loadingView?.stopAnimating()
+        loadingView?.removeFromSuperview()
+    }
+
+    private func showError(message: String) {
+        removeError()
+        let errorView = WeatherErrorView()
+        errorView.configure(title: "", message: message)
+        errorView.fill(in: view)
+        self.errorView = errorView
+    }
+
+    private func removeError() {
+        errorView?.removeFromSuperview()
+    }
+
+    private func showContent() {
+        tableView.isHidden = false
+    }
+
+    private func hideContent() {
+        tableView.isHidden = true
+    }
+}
+
 // MARK: - SearchViewable
 extension SearchViewController: SearchViewable {
-    func refreshContents() {
+    func renderContents() {
+        removeError()
+        removeLoading()
+        showContent()
         tableView.reloadData()
     }
 
-    func renderError() {
+    func renderError(message: String) {
+        hideContent()
+        removeLoading()
+        showError(message: message)
+    }
 
+    func renderLoading() {
+        hideContent()
+        removeError()
+        showLoading()
     }
 }
 

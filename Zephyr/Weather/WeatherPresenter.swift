@@ -10,6 +10,7 @@ import UIKit
 
 // MARK: - WeatherPresentable
 protocol WeatherPresentable {
+    func updateLocationIfRequired()
     func updateLocation()
     func navigateToSearch()
     func togglePreferredUnits()
@@ -208,6 +209,15 @@ extension WeatherPresenter {
 
 // MARK: WeatherPresentable
 extension WeatherPresenter: WeatherPresentable {
+    func updateLocationIfRequired() {
+        switch location {
+        case .notFetched, .failed:
+            updateLocation()
+        case .fetching, .fetched:
+            break
+        }
+    }
+
     func updateLocation() {
         location = .fetching
         locationManager.fetchCurrentLocation { [weak self] result in

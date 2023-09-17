@@ -85,7 +85,6 @@ final class WeatherViewController: UIViewController {
         let c = UICollectionView(frame: .zero, collectionViewLayout: layout)
         c.backgroundColor = .clear
         c.register(WeatherPrimaryInfoCell.self, forCellWithReuseIdentifier: WeatherPrimaryInfoCell.reuseIdentifier)
-        c.register(WeatherErrorCell.self, forCellWithReuseIdentifier: WeatherErrorCell.reuseIdentifier)
         c.register(WeatherAdditionalInfoCell.self, forCellWithReuseIdentifier: WeatherAdditionalInfoCell.reuseIdentifier)
         c.dataSource = self
         return c
@@ -108,7 +107,7 @@ final class WeatherViewController: UIViewController {
         super.viewDidLoad()
 
         setupLayout()
-        presenter.updateLocation()
+        presenter.updateLocationIfRequired()
     }
 }
 

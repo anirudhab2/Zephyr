@@ -23,10 +23,6 @@ final class WeatherRouter {
 
     weak var listener: WeatherRouterListener?
     weak var viewController: UIViewController?
-
-    init() {
-        
-    }
 }
 
 // MARK: WeatherRoutable

@@ -51,12 +51,9 @@ final class WeatherAdditionalInfoCell: UICollectionViewCell {
     }
 
     private func commonInit() {
-//        contentView.layer.borderWidth = 1
-//        contentView.layer.borderColor = Colors.Named.white.cgColor
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 10
 
-//        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         let backgroundView = UIView()
         backgroundView.backgroundColor = Colors.Named.black.withAlphaComponent(0.2)
         backgroundView.fill(in: contentView)
