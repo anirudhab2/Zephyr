@@ -185,6 +185,14 @@ extension WeatherPresenter {
             WeatherAdditionalInfoPresenter(
                 info: .sunset(weatherInfo.weather.sun.sunset),
                 units: units
+            ),
+            WeatherAdditionalInfoPresenter(
+                info: .visibility(weatherInfo.weather.visibility),
+                units: units
+            ),
+            WeatherAdditionalInfoPresenter(
+                info: .wind(weatherInfo.weather.wind.speed),
+                units: units
             )
         ]
         if let rain = weatherInfo.weather.rain?.lastHour {

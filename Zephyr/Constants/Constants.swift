@@ -70,6 +70,8 @@ extension Constants {
             static let snow = "Snow"
             static let sunrise = "Sunrise"
             static let sunset = "Sunset"
+            static let wind = "Wind"
+            static let visibility = "Visibility"
         }
     }
 }
@@ -81,5 +83,7 @@ extension Constants {
         static let percent = "%"
         static let pressure = "hPa"
         static let millimeters = "mm"
+        static let meterPerSec = "m/s"
+        static let milesPerHour = "mph"
     }
 }

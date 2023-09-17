@@ -65,14 +65,30 @@ struct WeatherAdditionalInfoPresenter: WeatherAdditionalInfoPresentable {
             icon = Assets.Others.sunset
 
         case .visibility(let distance):
-            return nil
+            guard let formattedValue = Formatters.distance.format(distance, units: units) else {
+                return nil
+            }
+            name = Constants.Messages.WeatherInfo.visibility
+            value = formattedValue
+            icon = Assets.Others.visibility
+
 
         case .wind(let speed):
-            return nil
+            name = Constants.Messages.WeatherInfo.wind
+            icon = Assets.Others.wind
+            value = {
+                switch units {
+                case .metric:
+                    return "\(speed) \(Constants.Units.meterPerSec)"
+                case .imperial:
+                    return "\(speed) \(Constants.Units.milesPerHour)"
+                }
+            }()
         }
     }
 }
 
+// MARK: - Info
 extension WeatherAdditionalInfoPresenter {
     enum Info {
         case apparentTemperature(Double)

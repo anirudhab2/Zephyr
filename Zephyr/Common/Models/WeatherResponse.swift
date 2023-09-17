@@ -15,22 +15,16 @@ struct WeatherResponse: Codable {
     let wind: Wind
     let rain: Rain?
     let snow: Rain?
-    let clouds: Clouds
     let dt: Double
     let sys: Sys
     let timezone, id: Int
     let name: String
 }
 
-// MARK: - Clouds
-struct Clouds: Codable {
-    let all: Int
-}
-
 // MARK: - Main
 struct Main: Codable {
     let temp, feelsLike: Double
-        let tempMin, tempMax: Double?
+    let tempMin, tempMax: Double?
     let pressure, humidity: Int
     let seaLevel, grndLevel: Int?
 

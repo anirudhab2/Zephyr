@@ -46,7 +46,6 @@ extension WeatherInformation {
         let temperature: TemperatureInfo
         let pressure: PressureInfo
         let wind: WindInfo
-        let clouds: CloudsInfo
         let sun: SunInfo
         let rain: PrecipitationInfo?
         let snow: PrecipitationInfo?
@@ -144,8 +143,6 @@ extension WeatherInformation {
             gust: response.wind.gust
         )
 
-        let cloudsInfo = CloudsInfo(all: response.clouds.all)
-
         let sunInfo = SunInfo(
             sunrise: Date(timeIntervalSince1970: response.sys.sunrise),
             sunset: Date(timeIntervalSince1970: response.sys.sunset)
@@ -171,7 +168,6 @@ extension WeatherInformation {
             temperature: tempInfo,
             pressure: pressureInfo,
             wind: windInfo,
-            clouds: cloudsInfo,
             sun: sunInfo,
             rain: rainInfo,
             snow: snowInfo
