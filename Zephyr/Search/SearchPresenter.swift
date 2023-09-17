@@ -67,7 +67,7 @@ extension SearchPresenter {
             view?.renderContents()
 
         case .failed:
-            view?.renderError(message: "No results found")
+            view?.renderError(message: Constants.Messages.searchNoResults)
         }
     }
 }

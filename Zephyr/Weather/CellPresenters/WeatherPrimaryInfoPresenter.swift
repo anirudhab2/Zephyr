@@ -42,7 +42,7 @@ struct WeatherPrimaryInfoPresenter: WeatherPrimaryInfoPresentable {
 
         let formatter = Formatters.temperature
         let tempInfo = weatherInfo.weather.temperature
-        temperature = formatter.format(tempInfo.current, unit: units) ?? "--"
+        temperature = formatter.format(tempInfo.current, unit: units) ?? Constants.Messages.temperaturePlaceholder
 
         let location = weatherInfo.location.cityName
         let conditions = weatherInfo.weather.displayInfo?.conditions
@@ -78,6 +78,6 @@ extension WeatherPrimaryInfoPresenter: WeatherInfoCellPresenter {
 // MARK: - Factory
 extension WeatherPrimaryInfoPresenter {
     static func placeholder() -> Self {
-        .init(temperature: "--")
+        .init(temperature: Constants.Messages.temperaturePlaceholder)
     }
 }

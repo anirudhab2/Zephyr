@@ -104,17 +104,17 @@ extension WeatherPresenter {
             let message: String
             switch error {
             case .permissionNotGranted:
-                title = "No location found"
-                message = "Search for location or enable location permission to see the weather data for your location"
+                title = Constants.Messages.locationErrorTitle
+                message = Constants.Messages.locationErrorNoPermisssion
 
             case .failed, .locationAccessRestricted:
-                title = "No location found"
-                message = "Unable to determine your location, search your location to see the latest weather data"
+                title = Constants.Messages.locationErrorTitle
+                message = Constants.Messages.locationErrorNoResults
             }
             let errorInfo = WeatherErrorView.ErrorInfo(
                 title: title,
                 message: message,
-                actionTitle: "Settings",
+                actionTitle: Constants.Messages.settings,
                 action: {
                     let settingsURL = URL(string: UIApplication.openSettingsURLString)!
                     UIApplication.shared.open(settingsURL)
@@ -137,9 +137,9 @@ extension WeatherPresenter {
 
         case .failed:
             let errorInfo = WeatherErrorView.ErrorInfo(
-                title: "Something went wrong",
-                message: "Unable to fetch weather data at your location",
-                actionTitle: "Retry",
+                title: Constants.Messages.weatherResultsFailureTitle,
+                message: Constants.Messages.weatherResultsFailureMessage,
+                actionTitle: Constants.Messages.retry,
                 action: { [weak self] in
                     self?.refreshWeatherData()
                 }
@@ -242,9 +242,9 @@ extension WeatherPresenter: WeatherPresentable {
     func unitSymbol() -> String {
         switch units {
         case .metric:
-            return "°C"
+            return Constants.Units.metricSymbol
         case .imperial:
-            return "°F"
+            return Constants.Units.imperialSymbol
         }
     }
 

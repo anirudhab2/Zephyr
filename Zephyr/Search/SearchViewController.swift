@@ -26,7 +26,7 @@ final class SearchViewController: UIViewController {
         let bar = UISearchBar()
         bar.autocapitalizationType = .none
         bar.autocorrectionType = .no
-        bar.placeholder = "Find location"
+        bar.placeholder = Constants.Messages.searchPlaceholder
         bar.showsCancelButton = true
         bar.delegate = self
         bar.tintColor = Colors.Named.white

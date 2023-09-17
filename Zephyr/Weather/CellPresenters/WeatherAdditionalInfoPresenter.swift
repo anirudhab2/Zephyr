@@ -24,35 +24,35 @@ struct WeatherAdditionalInfoPresenter: WeatherAdditionalInfoPresentable {
             guard let formattedValue = Formatters.temperature.format(temp, unit: units) else {
                 return nil
             }
-            name = "Feels like"
+            name = Constants.Messages.WeatherInfo.feelsLike
             value = formattedValue
             icon = Assets.Others.apparentTemperature
 
         case .humidity(let percent):
-            name = "Humidity"
-            value = "\(percent)%"
+            name = Constants.Messages.WeatherInfo.humidity
+            value = "\(percent)" + Constants.Units.percent
             icon = Assets.Others.humidity
 
         case .pressure(let pressure):
-            name = "Pressure"
-            value = "\(pressure) hPa"
+            name = Constants.Messages.WeatherInfo.pressure
+            value = "\(pressure) \(Constants.Units.pressure)"
             icon = Assets.Others.pressure
 
         case .rain(let length):
-            name = "Rain"
-            value = "\(length)mm"
+            name = Constants.Messages.WeatherInfo.rain
+            value = "\(length)" + Constants.Units.millimeters
             icon = Assets.Rain.showers
 
         case .snow(let length):
-            name = "Snow"
-            value = "\(length)mm"
+            name = Constants.Messages.WeatherInfo.snow
+            value = "\(length)" + Constants.Units.millimeters
             icon = Assets.Others.snow
 
         case .sunrise(let time):
             guard let formattedValue = Formatters.time.format(time) else {
                 return nil
             }
-            name = "Sunrise"
+            name = Constants.Messages.WeatherInfo.sunrise
             value = formattedValue
             icon = Assets.Others.sunrise
 
@@ -60,7 +60,7 @@ struct WeatherAdditionalInfoPresenter: WeatherAdditionalInfoPresentable {
             guard let formattedValue = Formatters.time.format(time) else {
                 return nil
             }
-            name = "Sunset"
+            name = Constants.Messages.WeatherInfo.sunset
             value = formattedValue
             icon = Assets.Others.sunset
 
