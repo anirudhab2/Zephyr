@@ -30,21 +30,3 @@ enum Colors {
         }
     }
 }
-
-extension Colors {
-    enum Background {
-        static var primary: UIColor {
-            .systemBackground
-        }
-    }
-
-    enum Text {
-        static var primary: UIColor {
-            .white
-        }
-
-        static var secondary: UIColor {
-            primary.withAlphaComponent(0.7)
-        }
-    }
-}
