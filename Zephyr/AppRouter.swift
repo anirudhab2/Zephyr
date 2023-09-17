@@ -9,7 +9,10 @@ import UIKit
 
 struct AppRouter {
     func setupInitialNavigation(from window: UIWindow) {
-        let homeViewController = WeatherBuilder().build(locationManager: .init())
+        let homeViewController = WeatherBuilder().build(
+            locationManager: .init(),
+            preferences: Preferences()
+        )
         let rootNavigationController = UINavigationController(rootViewController: homeViewController)
 
         window.rootViewController = rootNavigationController

@@ -1,5 +1,5 @@
 //
-//  WeatherSummaryPresenter.swift
+//  WeatherPrimaryInfoPresenter.swift
 //  Zephyr
 //
 //  Created by Anirudha Tolambia on 16/09/23.
@@ -7,46 +7,46 @@
 
 import UIKit
 
-protocol WeatherSummaryPresentable {
-    var location: String? { get }
+protocol WeatherPrimaryInfoPresentable {
     var temperature: String { get }
-    var conditions: String? { get }
-    var temperatureRange: String? { get }
     var weatherIcon: UIImage? { get }
+    var summary: String? { get }
 }
 
-struct WeatherSummaryPresenter: WeatherSummaryPresentable {
-    let location: String?
+struct WeatherPrimaryInfoPresenter: WeatherPrimaryInfoPresentable {
     let temperature: String
-    let conditions: String?
-    let temperatureRange: String?
     let weatherIcon: UIImage?
+    let summary: String?
 
     init(
-        location: String? = nil,
         temperature: String,
-        conditions: String? = nil,
-        temperatureRange: String? = nil,
-        weatherIcon: UIImage? = nil
+        weatherIcon: UIImage? = nil,
+        summary: String? = nil
     ) {
-        self.location = location
         self.temperature = temperature
-        self.conditions = conditions
-        self.temperatureRange = temperatureRange
         self.weatherIcon = weatherIcon
+        self.summary = summary
     }
 
     init(
         weatherInfo: WeatherInformation,
         units: Units
     ) {
-        location = weatherInfo.location.cityName
-        conditions = weatherInfo.weather.displayInfo?.conditions
+        weatherIcon = {
+            guard let iconCode = weatherInfo.weather.displayInfo?.icon,
+                  let type = WeatherType(iconCode: iconCode) else {
+                return Assets.Clouds.full
+            }
+            return type.asset()
+        }()
 
         let formatter = Formatters.temperature
         let tempInfo = weatherInfo.weather.temperature
         temperature = formatter.format(tempInfo.current, unit: units) ?? "--"
-        temperatureRange = {
+
+        let location = weatherInfo.location.cityName
+        let conditions = weatherInfo.weather.displayInfo?.conditions
+        let temperatureRange: String? = {
             guard let min = tempInfo.min,
                   let max = tempInfo.max,
                   max > min else {
@@ -59,30 +59,24 @@ struct WeatherSummaryPresenter: WeatherSummaryPresentable {
             return "L:\(minTemp) - H:\(maxTemp)"
         }()
 
-        weatherIcon = {
-            guard let iconCode = weatherInfo.weather.displayInfo?.icon,
-                  let type = WeatherType(iconCode: iconCode) else {
-                return Assets.Clouds.full
-            }
-            return type.asset()
-        }()
+        summary = [location, conditions, temperatureRange].compactMap({ $0 }).joined(separator: " | ")
     }
 }
 
 // MARK: - WeatherSummaryPresenter + WeatherInfoCellPresenter
-extension WeatherSummaryPresenter: WeatherInfoCellPresenter {
+extension WeatherPrimaryInfoPresenter: WeatherInfoCellPresenter {
     func cellIdentifier() -> String {
-        WeatherSummaryCell.reuseIdentifier
+        WeatherPrimaryInfoCell.reuseIdentifier
     }
 
     func configure(cell: UICollectionViewCell) {
-        guard let cell = cell as? WeatherSummaryCell else { return }
+        guard let cell = cell as? WeatherPrimaryInfoCell else { return }
         cell.configure(with: self)
     }
 }
 
 // MARK: - Factory
-extension WeatherSummaryPresenter {
+extension WeatherPrimaryInfoPresenter {
     static func placeholder() -> Self {
         .init(temperature: "--")
     }

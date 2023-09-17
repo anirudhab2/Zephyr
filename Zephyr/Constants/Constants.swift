@@ -8,15 +8,20 @@
 import Foundation
 
 enum Constants {
-    
-}
-
-extension Constants {
     enum App {
         // I'm aware that we aren't supposed to hardcode secrets in public repo
         // Letting it slide since it's a demo app
         // In production apps we have better ways to handle this
         static let apiKey = "d200ac1151d96e32428ce0628e511a46"
+
+        static let bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.anirudha.zephyr"
+    }
+}
+
+extension Constants {
+    enum UserDefaultsKeys {
+        static let units = App.bundleIdentifier + "units"
+        static let location = App.bundleIdentifier + "location"
     }
 }
 

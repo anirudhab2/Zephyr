@@ -11,12 +11,12 @@ enum Units: String, Codable {
     case metric     // metric units, Celsius
     case imperial   // Imperial units, Fahrenheit
 
-    func suffix() -> String {
+    mutating func toggle() {
         switch self {
         case .metric:
-            return "°C"
+            self = .imperial
         case .imperial:
-            return "°F"
+            self = .metric
         }
     }
 }

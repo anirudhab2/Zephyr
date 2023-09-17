@@ -10,7 +10,9 @@ import UIKit
 
 // MARK: - WeatherViewable
 protocol WeatherViewable: AnyObject {
-    func refreshContent()
+    func renderLoading()
+    func renderError(with info: WeatherErrorView.ErrorInfo)
+    func renderContent()
 }
 
 // MARK: - WeatherViewController
@@ -18,6 +20,41 @@ final class WeatherViewController: UIViewController {
 
     private let presenter: WeatherPresentable
     private let style: Style
+
+    private weak var loadingView: UIActivityIndicatorView?
+    private weak var errorView: WeatherErrorView?
+
+    private lazy var unitsBarItem: UIBarButtonItem = {
+        let b = UIBarButtonItem(
+            title: presenter.unitSymbol(),
+            style: .plain,
+            target: self,
+            action: #selector(unitTapped)
+        )
+        b.tintColor = Colors.Text.primary
+        return b
+    }()
+
+    private lazy var searchBarItem: UIBarButtonItem = {
+        let b = UIBarButtonItem(
+            barButtonSystemItem: .search,
+            target: self,
+            action: #selector(searchTapped)
+        )
+        b.tintColor = Colors.Text.primary
+        return b
+    }()
+
+    private lazy var locationBarItem: UIBarButtonItem = {
+        let b = UIBarButtonItem(
+            image: Assets.location,
+            style: .plain,
+            target: self,
+            action: #selector(locationTapped)
+        )
+        b.tintColor = Colors.Text.primary
+        return b
+    }()
 
     private lazy var layout: UICollectionViewLayout = {
         UICollectionViewCompositionalLayout { _, _ in
@@ -47,33 +84,11 @@ final class WeatherViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let c = UICollectionView(frame: .zero, collectionViewLayout: layout)
         c.backgroundColor = .clear
-        c.register(WeatherSummaryCell.self, forCellWithReuseIdentifier: WeatherSummaryCell.reuseIdentifier)
+        c.register(WeatherPrimaryInfoCell.self, forCellWithReuseIdentifier: WeatherPrimaryInfoCell.reuseIdentifier)
         c.register(WeatherErrorCell.self, forCellWithReuseIdentifier: WeatherErrorCell.reuseIdentifier)
         c.register(WeatherAdditionalInfoCell.self, forCellWithReuseIdentifier: WeatherAdditionalInfoCell.reuseIdentifier)
         c.dataSource = self
-        c.delegate = self
         return c
-    }()
-
-    private lazy var searchBarItem: UIBarButtonItem = {
-        let b = UIBarButtonItem(
-            barButtonSystemItem: .search,
-            target: self,
-            action: #selector(searchTapped)
-        )
-        b.tintColor = Colors.Text.primary
-        return b
-    }()
-
-    private lazy var locationBarItem: UIBarButtonItem = {
-        let b = UIBarButtonItem(
-            image: Assets.location,
-            style: .plain,
-            target: self,
-            action: #selector(locationTapped)
-        )
-        b.tintColor = Colors.Text.primary
-        return b
     }()
 
     // MARK: - Init/Deinit
@@ -100,11 +115,13 @@ final class WeatherViewController: UIViewController {
 // MARK: - Layout
 extension WeatherViewController {
     private func setupLayout() {
-        self.navigationItem.rightBarButtonItems = [searchBarItem, locationBarItem]
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = Colors.Named.appTheme
+        navigationItem.standardAppearance = appearance
 
-        let gradientView = GradientView(style: .vertical)
-        gradientView.setColors([Colors.Named.blue, Colors.Named.black])
-        gradientView.fill(in: view)
+        showBarItems()
+        view.backgroundColor = Colors.Named.appTheme
 
         collectionView.fill(in: view)
     }
@@ -112,6 +129,10 @@ extension WeatherViewController {
 
 // MARK: - Actions
 extension WeatherViewController {
+    @objc private func unitTapped() {
+        presenter.togglePreferredUnits()
+    }
+
     @objc private func searchTapped() {
         presenter.navigateToSearch()
     }
@@ -121,9 +142,76 @@ extension WeatherViewController {
     }
 }
 
+// MARK: - Helpers
+extension WeatherViewController {
+    private func showLoading() {
+        guard loadingView == nil else { return }
+
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.tintColor = Colors.Named.white
+        loader.fill(in: view)
+        loader.startAnimating()
+        self.loadingView = loader
+    }
+
+    private func removeLoading() {
+        loadingView?.stopAnimating()
+        loadingView?.removeFromSuperview()
+    }
+
+    private func showError(with info: WeatherErrorView.ErrorInfo) {
+        removeError()
+        let errorView = WeatherErrorView()
+        errorView.configure(with: info)
+        errorView.fill(in: view)
+        self.errorView = errorView
+    }
+
+    private func removeError() {
+        errorView?.removeFromSuperview()
+    }
+
+    private func showContent() {
+        collectionView.isHidden = false
+        showBarItems()
+    }
+
+    private func hideContent() {
+        collectionView.isHidden = true
+        hideBarItems()
+    }
+
+    private func showBarItems() {
+        navigationItem.leftBarButtonItem = unitsBarItem
+        navigationItem.rightBarButtonItems = [locationBarItem, searchBarItem]
+        unitsBarItem.title = presenter.unitSymbol()
+    }
+
+    private func hideBarItems() {
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItems = nil
+    }
+}
+
 // MARK: WeatherViewable
 extension WeatherViewController: WeatherViewable {
-    func refreshContent() {
+    func renderLoading() {
+        removeError()
+        hideContent()
+        showLoading()
+    }
+
+    func renderError(with info: WeatherErrorView.ErrorInfo) {
+        removeLoading()
+        hideContent()
+        showError(with: info)
+    }
+
+    func renderContent() {
+        removeError()
+        removeLoading()
+        
+        showContent()
         collectionView.reloadData()
     }
 }
@@ -145,13 +233,6 @@ extension WeatherViewController: UICollectionViewDataSource {
         )
         section.configure(cell: cell)
         return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-extension WeatherViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        presenter.handleSelection(atIndex: indexPath.item)
     }
 }
 

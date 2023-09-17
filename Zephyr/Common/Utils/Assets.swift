@@ -16,45 +16,45 @@ enum Assets {
 extension Assets {
     enum Clear {
         static var sun: UIImage? {
-            UIImage(systemName: "sun.max.fill")
+            UIImage(systemName: "sun.max")
         }
 
         static var moon: UIImage? {
-            UIImage(systemName: "moon.fill")
+            UIImage(systemName: "moon")
         }
     }
 
     enum Clouds {
         static var withSun: UIImage? {
-            UIImage(systemName: "cloud.sun.fill")
+            UIImage(systemName: "cloud.sun")
         }
 
         static var withMoon: UIImage? {
-            UIImage(systemName: "cloud.moon.fill")
+            UIImage(systemName: "cloud.moon")
         }
 
         static var full: UIImage? {
-            UIImage(systemName: "cloud.fill")
+            UIImage(systemName: "cloud")
         }
     }
 
     enum Rain {
         static var withSun: UIImage? {
-            UIImage(systemName: "cloud.sun.rain.fill")
+            UIImage(systemName: "cloud.sun.rain")
         }
 
         static var withMoon: UIImage? {
-            UIImage(systemName: "cloud.moon.rain.fill")
+            UIImage(systemName: "cloud.moon.rain")
         }
 
         static var showers: UIImage? {
-            UIImage(systemName: "cloud.rain.fill")
+            UIImage(systemName: "cloud.rain")
         }
     }
 
     enum Others {
         static var fog: UIImage? {
-            UIImage(systemName: "cloud.fog.fill")
+            UIImage(systemName: "cloud.fog")
         }
 
         static var snow: UIImage? {
@@ -62,23 +62,23 @@ extension Assets {
         }
 
         static var thunderstorm: UIImage? {
-            UIImage(systemName: "cloud.bolt.rain.fill")
+            UIImage(systemName: "cloud.bolt.rain")
         }
 
         static var humidity: UIImage? {
-            UIImage(systemName: "humidity.fill")
+            UIImage(systemName: "humidity")
         }
 
         static var pressure: UIImage? {
-            UIImage(systemName: "arrow.down")
+            UIImage(systemName: "barometer")
         }
 
         static var sunrise: UIImage? {
-            UIImage(systemName: "sunrise.fill")
+            UIImage(systemName: "sunrise")
         }
 
         static var sunset: UIImage? {
-            UIImage(systemName: "sunset.fill")
+            UIImage(systemName: "sunset")
         }
 
         static var apparentTemperature: UIImage? {
@@ -86,7 +86,7 @@ extension Assets {
         }
 
         static var visibility: UIImage? {
-            UIImage(systemName: "eye.fill")
+            UIImage(systemName: "eye")
         }
 
         static var wind: UIImage? {

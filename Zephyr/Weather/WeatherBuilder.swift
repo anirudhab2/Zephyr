@@ -10,12 +10,14 @@ import UIKit
 
 struct WeatherBuilder {
     func build(
-        locationManager: LocationManager
+        locationManager: LocationManager,
+        preferences: Preferences
     ) -> UIViewController {
         let interactor = WeatherInteractor()
         let router = WeatherRouter()
         let presenter = WeatherPresenter(
             locationManager: locationManager,
+            preferences: preferences,
             interactor: interactor,
             router: router
         )
