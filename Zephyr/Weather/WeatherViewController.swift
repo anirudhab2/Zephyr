@@ -31,7 +31,7 @@ final class WeatherViewController: UIViewController {
             target: self,
             action: #selector(unitTapped)
         )
-        b.tintColor = Colors.Text.primary
+        b.tintColor = Colors.Named.white
         return b
     }()
 
@@ -41,7 +41,7 @@ final class WeatherViewController: UIViewController {
             target: self,
             action: #selector(searchTapped)
         )
-        b.tintColor = Colors.Text.primary
+        b.tintColor = Colors.Named.white
         return b
     }()
 
@@ -52,7 +52,7 @@ final class WeatherViewController: UIViewController {
             target: self,
             action: #selector(locationTapped)
         )
-        b.tintColor = Colors.Text.primary
+        b.tintColor = Colors.Named.white
         return b
     }()
 

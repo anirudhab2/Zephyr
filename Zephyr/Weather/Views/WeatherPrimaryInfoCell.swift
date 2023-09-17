@@ -13,7 +13,7 @@ final class WeatherPrimaryInfoCell: UICollectionViewCell {
 
     private lazy var weatherIcon: UIImageView = {
         let i = UIImageView()
-        i.tintColor = Colors.Text.primary
+        i.tintColor = Colors.Named.white
         i.contentMode = .scaleAspectFit
         i.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

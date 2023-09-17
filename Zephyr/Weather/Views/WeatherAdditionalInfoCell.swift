@@ -13,7 +13,7 @@ final class WeatherAdditionalInfoCell: UICollectionViewCell {
     private lazy var icon: UIImageView = {
         let i = UIImageView()
         i.contentMode = .scaleAspectFit
-        i.tintColor = Colors.Text.primary
+        i.tintColor = Colors.Named.white
         i.translatesAutoresizingMaskIntoConstraints = false
         return i
     }()
@@ -21,7 +21,7 @@ final class WeatherAdditionalInfoCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: style.fontSize)
-        l.textColor = Colors.Text.primary
+        l.textColor = Colors.Named.white
         l.textAlignment = .left
         l.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         l.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -32,7 +32,7 @@ final class WeatherAdditionalInfoCell: UICollectionViewCell {
     private lazy var valueLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: style.fontSize)
-        l.textColor = Colors.Text.primary
+        l.textColor = Colors.Named.white
         l.textAlignment = .right
         l.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         l.translatesAutoresizingMaskIntoConstraints = false
